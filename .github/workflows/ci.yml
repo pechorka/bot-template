@@ -22,9 +22,15 @@ jobs:
         run: $GITHUB_WORKSPACE/golangci-lint run --config .golangci.yml ./...
       - name: build
         run: cd app && go build -race -v -mod=readonly
+      - name: Login to GitHub Container Registry
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: build and push master image
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
           docker build -t pechorka/bot-template:master .
-          docker login --username ${{ secrets.DOCKERHUB_USER }} --password ${{ secrets.DOCKERHUB_PASSWD }}
           docker push pechorka/bot-template:master
