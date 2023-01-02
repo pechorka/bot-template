@@ -20,6 +20,7 @@ type ibot interface {
 	OnMessage(message bot.Message) bot.Response
 }
 
+// Listener listens for events from telegram
 type Listener struct {
 	Bot ibot
 	API tbAPI

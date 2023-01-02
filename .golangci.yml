@@ -1,0 +1,28 @@
+run:
+  tests: false
+  output:
+    format: tab
+  skip-dirs:
+    - vendor
+
+linters:
+  enable:
+    - unconvert
+    - megacheck
+    - gas
+    - gocyclo
+    - dupl
+    - misspell
+    - unparam
+    - unused
+    - typecheck
+    - ineffassign
+    - revive
+  disable-all: true
+
+issues:
+  exclude-use-default: false
+  exclude-rules:
+    - text: "package-comments: should have a package comment"
+      linters:
+        - revive
