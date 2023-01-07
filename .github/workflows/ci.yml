@@ -1,7 +1,7 @@
 on: [push]
 
 jobs:
-  Explore-GitHub-Actions:
+  build-test-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: set up go 1.19
@@ -37,4 +37,4 @@ jobs:
       - name: deploy
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-          curl ${{secrets.UPDATER_HOST}}/update/echo-bot/${{secrets.UPDATER_KEY}}
+          curl http://165.227.148.183:8080/update/echo-bot/${{secrets.UPDATER_KEY}}
