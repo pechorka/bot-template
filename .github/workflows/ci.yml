@@ -32,5 +32,5 @@ jobs:
       - name: build and push master image
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-          docker build -t pechorka/bot-template:master .
-          docker push pechorka/bot-template:master
+          docker build -t ghcr.io/pechorka/bot-template:master .
+          docker push ghcr.io/pechorka/bot-template:master
