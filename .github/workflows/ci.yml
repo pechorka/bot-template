@@ -34,3 +34,7 @@ jobs:
         run: |
           docker build -t ghcr.io/pechorka/bot-template:master .
           docker push ghcr.io/pechorka/bot-template:master
+      - name: deploy
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          ${{secrets.UPDATER_HOST}}/update/echo-bot/${{secrets.UPDATER_KEY}}
