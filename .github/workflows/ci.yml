@@ -37,4 +37,4 @@ jobs:
       - name: deploy
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-          ${{secrets.UPDATER_HOST}}/update/echo-bot/${{secrets.UPDATER_KEY}}
+          curl ${{secrets.UPDATER_HOST}}/update/echo-bot/${{secrets.UPDATER_KEY}}
