@@ -3,10 +3,9 @@ package main
 import (
 	"context"
 	tbapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/jessevdk/go-flags"
+	flags "github.com/jessevdk/go-flags"
 	"github.com/pechorka/bot-template/app/bot"
 	"github.com/pechorka/bot-template/app/events"
-	"github.com/pkg/errors"
 	"log"
 	"os"
 	"strings"
@@ -20,10 +19,11 @@ var opts struct {
 	Dbg bool `long:"dbg" env:"DEBUG" description:"debug mode"`
 }
 
-func exportEnvFile() error {
+func exportEnvFile() {
 	f, err := os.ReadFile(".env")
 	if err != nil {
-		return errors.Wrap(err, "failed to read .env file")
+		log.Printf("[WARN] failed to read .env file: %v", err)
+		return
 	}
 
 	for _, line := range strings.Split(string(f), "\n") {
@@ -32,22 +32,20 @@ func exportEnvFile() error {
 		}
 		name, val, ok := strings.Cut(line, "=")
 		if !ok {
-			return errors.New("failed to parse .env file")
+			log.Printf("[WARN] failed to parse line: %s", line)
+			continue
 		}
 		if err := os.Setenv(name, val); err != nil {
-			return errors.Wrap(err, "failed to set env var")
+			log.Printf("[WARN] failed to set env var: %v", err)
+			continue
 		}
 	}
-
-	return nil
 }
 
 func main() {
 	ctx := context.TODO()
 
-	if err := exportEnvFile(); err != nil {
-		log.Fatalf("[WARN] failed to export env vars from .env file: %v", err)
-	}
+	exportEnvFile()
 
 	_, err := flags.Parse(&opts)
 	if err != nil {
